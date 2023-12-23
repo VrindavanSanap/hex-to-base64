@@ -14,6 +14,15 @@ export function hex_to_binary(hex_string) {
     }
     return binary_string 
 }
+
+export function is_valid_base64(str) {
+    while(str.length % 4 != 0){
+        str += "="
+    }
+  const base64Regex = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;
+  return base64Regex.test(str);
+}
+
 export function base64_to_binary(base64_string){
   const binary_string = atob(base64_string);
   const binary_data = [];
@@ -57,11 +66,4 @@ export function base64_to_hex(base64_string){
     return hex_string 
 }
 
-export function is_valid_base64(str) {
-    try {
-        return btoa(atob(str)) === str;
-    } catch (error) {
-        return false;
-    }
-}
 
