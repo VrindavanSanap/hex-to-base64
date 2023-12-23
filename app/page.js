@@ -1,30 +1,56 @@
 "use client"
 import Image from 'next/image'
 import React, { useState } from "react"
-import {hex_to_base64, is_valid_hex} from "./crypto"
+import {hex_to_base64,base64_to_hex,  is_valid_hex, is_valid_base64} from "./crypto"
 export default function Home() {
   const [hex_string, set_hex_string] = useState("");
   const [base64_string, set_base64_string] = useState("");
-  function handle_click(){
+  const [reversed, set_reversed] = useState(false)
+  function handle_convert_button(){
     console.log("clicked")
-    if (!is_valid_hex(hex_string)){
-      alert("Invalid hex string")
-      return 
+    
+    if (!reversed){
+      if (!is_valid_hex(hex_string)){
+        alert("Invalid hex string")
+        return 
+      }
+      set_base64_string(hex_to_base64(hex_string))
+    }else{
+      if (!is_valid_base64(base64_string)){
+        alert("Invalid base64 string")
+        return 
+      }
+
+      set_hex_string(base64_to_hex(base64_string))
     }
-    set_base64_string(hex_to_base64(hex_string))
   }
-  function handle_hex_string_change(e){
-    set_hex_string(e.target.value) 
+  function handle_input_change(e){
+    if(!reversed){    
+      set_hex_string(e.target.value) 
+    }else{
+
+      set_base64_string(e.target.value)
+      }
+  }
+  function handle_reverse_button(){
+    set_reversed(!reversed)
+    
   }
   return (
     <main>
-      <h1>Hex to base64</h1>
-      <h3>Hex string</h3>
-      <input value = {hex_string} onChange= {handle_hex_string_change}name="hex_string" />
-      <button onClick = {handle_click}> Convert </button>
-
-      <h3>Base64 string</h3>
-      <p>{base64_string}</p>
+      <h1>
+        {!reversed ? "Hex to Base 64":"Base64 to Hex"}
+      </h1>
+      <input value = {!reversed ? hex_string : base64_string} 
+        onChange= {handle_input_change} name="input" />
+      <button onClick = {handle_convert_button}> Convert </button>
+      <h3>
+        {!reversed ? "Base64 String" : "Hex String" }
+      </h3>
+      <p>
+        {!reversed ? base64_string : hex_string}
+      </p>
+      <button onClick = {handle_reverse_button}>Reverse </button>
     </main>
   )
 }

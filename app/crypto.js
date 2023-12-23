@@ -56,6 +56,12 @@ export function base64_to_hex(base64_string){
     }
     return hex_string 
 }
-let base64_string = "aasdfasdff"
-console.log(base64_to_hex(base64_string))
+
+export function is_valid_base64(str) {
+    try {
+        return btoa(atob(str)) === str;
+    } catch (error) {
+        return false;
+    }
+}
 
